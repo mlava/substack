@@ -1,0 +1,79 @@
+/*
+ * Copyright 2016 Palantir Technologies, Inc. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+import { getDateNextMonth, getDatePreviousMonth } from "./dateUtils";
+var MonthAndYear = /** @class */ (function () {
+    function MonthAndYear(month, year) {
+        if (month !== null && year !== null) {
+            this.date = new Date(year, month);
+        }
+        else {
+            this.date = new Date();
+        }
+    }
+    MonthAndYear.fromDate = function (date) {
+        return date == null ? undefined : new MonthAndYear(date.getMonth(), date.getFullYear());
+    };
+    MonthAndYear.prototype.clone = function () {
+        return new MonthAndYear(this.getMonth(), this.getYear());
+    };
+    MonthAndYear.prototype.getFullDate = function () {
+        return this.date;
+    };
+    MonthAndYear.prototype.getMonth = function () {
+        return this.date.getMonth();
+    };
+    MonthAndYear.prototype.getYear = function () {
+        return this.date.getFullYear();
+    };
+    MonthAndYear.prototype.getPreviousMonth = function () {
+        var previousMonthDate = getDatePreviousMonth(this.date);
+        return new MonthAndYear(previousMonthDate.getMonth(), previousMonthDate.getFullYear());
+    };
+    MonthAndYear.prototype.getNextMonth = function () {
+        var nextMonthDate = getDateNextMonth(this.date);
+        return new MonthAndYear(nextMonthDate.getMonth(), nextMonthDate.getFullYear());
+    };
+    MonthAndYear.prototype.isBefore = function (monthAndYear) {
+        return compareMonthAndYear(this, monthAndYear) < 0;
+    };
+    MonthAndYear.prototype.isAfter = function (monthAndYear) {
+        return compareMonthAndYear(this, monthAndYear) > 0;
+    };
+    MonthAndYear.prototype.isSame = function (monthAndYear) {
+        return compareMonthAndYear(this, monthAndYear) === 0;
+    };
+    MonthAndYear.prototype.isSameMonth = function (monthAndYear) {
+        return this.getMonth() === monthAndYear.getMonth();
+    };
+    return MonthAndYear;
+}());
+export { MonthAndYear };
+// returns negative if left < right
+// returns positive if left > right
+// returns 0 if left === right
+function compareMonthAndYear(firstMonthAndYear, secondMonthAndYear) {
+    var firstMonth = firstMonthAndYear.getMonth();
+    var firstYear = firstMonthAndYear.getYear();
+    var secondMonth = secondMonthAndYear.getMonth();
+    var secondYear = secondMonthAndYear.getYear();
+    if (firstYear === secondYear) {
+        return firstMonth - secondMonth;
+    }
+    else {
+        return firstYear - secondYear;
+    }
+}
+//# sourceMappingURL=monthAndYear.js.map
