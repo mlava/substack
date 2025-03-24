@@ -1,14 +1,14 @@
 {
   "name": "substack",
   "version": "1.0.0",
-  "description": "Crosswords for your Roam Research graph",
+  "description": "Substack in your Roam Research graph",
   "main": "index.js",
   "scripts": {
     "build": "webpack"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mlava/crosswords.git"
+    "url": "git+https://github.com/mlava/substack.git"
   },
   "keywords": [
     "crossword"
@@ -16,9 +16,9 @@
   "author": "Mark Lavercombe",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/mlava/crosswords/issues"
+    "url": "https://github.com/mlava/substack/issues"
   },
-  "homepage": "https://github.com/mlava/crosswords#readme",
+  "homepage": "https://github.com/mlava/substack#readme",
   "devDependencies": {
     "@babel/core": "^7.23.6",
     "@babel/preset-env": "^7.23.6",
@@ -28,11 +28,11 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
-    "@jaredreisinger/react-crossword": "^5.2.0",
+    "react-substack": "^1.0.17",
     "roamjs-components": "^0.83.2"
   },
   "overrides": {
-    "@jaredreisinger/react-crossword": {
+    "react-substack": {
       "react": "17.0.2",
       "react-dom": "17.0.2"
     },
