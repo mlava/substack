@@ -1,10 +1,5 @@
 import { createComponentRender } from "roamjs-components/components/ComponentContainer";
 import React, { useEffect, useState } from 'react';
-import {
-    CrosswordProvider,
-    CrosswordGrid,
-    DirectionClues,
-} from '@jaredreisinger/react-crossword';
 
 const CrosswordElement = ({ blockUid }) => {
     const [guesses, setGuesses] = useState([]);
