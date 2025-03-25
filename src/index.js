@@ -18,7 +18,7 @@ export default {
         runners['observers'] = [crosswordObserver];
 
         extensionAPI.ui.commandPalette.addCommand({
-            label: "Embed a post from Substack",
+            label: "Embed a Substack post from clipboard",
             callback: () => {
                 const uid = window.roamAlphaAPI.ui.getFocusedBlock()?.["block-uid"];
                 if (uid == undefined) {
@@ -27,18 +27,47 @@ export default {
                 } else {
                     window.roamAlphaAPI.updateBlock(
                         { block: { uid: uid, string: "Loading...".toString(), open: true } });
-                        fetchSubstack(uid, false);
+                    fetchSubstack(uid, false);
                 }
             }
         });
 
         async function fetchSubstack(blockUid) {
-            var cDate, cAuthor, cDay, cMonth, cYear, data, cols, rows;
-            breakme: {
-                var url = `https://raw.githubusercontent.com/doshea/nyt_crosswords/master/${year}/${month}/${day}.json`;
-                const response = await fetch(url);
-                data = await response.json();
 
+            breakme: {
+                const clipText = await navigator.clipboard.readText();
+
+                // determine domain
+                var domain = clipText.split('https://open.substack.com/pub/');
+                if (domain.length > 1) {
+                    domain = domain[1].split('/')[0];
+                    console.info(domain);
+                } else {
+                    const regex = /^(?:https?:\/\/)?(?:[^@\n]+@)?(?:www\.)?([^:\/\n?]+)/gm;
+                    let m;
+
+                    while ((m = regex.exec(domain[0])) !== null) {
+                        if (m.index === regex.lastIndex) {
+                            regex.lastIndex++;
+                        }
+                        m.forEach((match, groupIndex) => {
+                            domain = match;
+                        });
+                    }
+                    domain = domain.split('.')[0];
+                }
+
+                // determine slug
+                var slug = clipText.split('?');
+                slug = slug[0].split('/');
+                slug = slug.at(-1);
+
+                var feedURL = "https://"+domain+".substack.com/feed";
+                var url = `https://api.rss2json.com/v1/api.json?rss_url=${feedURL}`;
+                const response = await fetch(url);
+                var data = await response.json();
+                console.info(data);
+                
                 // setTimeout is needed because sometimes block is left blank
                 setTimeout(async () => {
                     await window.roamAlphaAPI.updateBlock({ "block": { "uid": blockUid, "string": "**NYT Crossword**" } });
